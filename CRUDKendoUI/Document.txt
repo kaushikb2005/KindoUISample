@@ -1,0 +1,4 @@
+- Please execute SQL script
+- Change connection string in web.config - Server, Database, UserId/Pwd
+- change ApiUrl in webapplication\views\CRUD\Index file
+    var ApiUrl = "http://localhost:62042/";

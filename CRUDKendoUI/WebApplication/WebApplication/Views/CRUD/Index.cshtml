@@ -1,0 +1,117 @@
+﻿<script type="text/javascript">
+
+    $(document).ready(function () {
+        var ApiUrl = "http://localhost:62042/";
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read:
+                {
+                    url: ApiUrl + "api/GetEmployees",
+                    dataType: "json",
+                },
+                destroy:
+                {
+                    url: ApiUrl + "api/DeleteEmployee",
+                    type: "DELETE"
+                },
+                create:
+                {
+                    url: ApiUrl + "api/AddEmployee",
+                    type: "POST"
+                },
+                update:
+                {
+                    url: ApiUrl + "api/UpdateEmployee",
+                    type: "PUT",
+                    parameterMap: function (options, operation) {
+                        if (operation !== "read" && options.models) {
+                            return {
+                                models: kendo.stringify(options.models)
+                            };
+                        }
+                    }
+                },
+            },
+            schema:
+            {
+                model:
+                {
+                    id: "ID",
+                    fields: {
+                        FullName: { editable: true, nullable: false, type: "string", validation: { required: true } },
+                        Designation: { editable: true, nullable: false, type: "string", validation: { required: true } },
+                        Phone: { editable: true, nullable: false, type: "string", validation: { required: true } },
+                        Email: { editable: true, nullable: false, type: "email", validation: { required: true } },
+                    }
+                }
+            }
+        });
+        $("#EmployeeGrid").kendoGrid({
+            dataSource: dataSource,
+            editable: "popup",
+            groupable: true,
+            filterable: true,
+            sortable: true,
+            pageable: {
+                refresh: true,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            edit: function (e) {
+                e.container.find("input:first").hide();
+            },
+            toolbar: ["create"],
+            columns: [
+                     {
+                         field: "ID",
+                         title: "ID",
+                         width: 25,
+                         filterable: false,
+                     },
+            {
+                field: "FullName",
+                title: "Name",
+                width: 120,
+            },
+            {
+                field: "Designation",
+                title: "Designation",
+                filterable: { multi: true, search: true },
+                width: 150,
+            },
+               {
+                   field: "Phone",
+                   title: "Phone",
+                   filterable: true,
+                   width: 90,
+               },
+                      {
+                          field: "Email",
+                          title: "Email",
+                          width: 150,
+                          filterable: true
+                      },
+            {
+                command: ["edit", { name: "destroy", text: "remove", }],
+            }
+            ],
+            height: "500px",
+            pageable: {
+                refresh: true,
+                pageSizes: true,
+                buttonCount: 5
+            },
+        }).data("kendoGrid");
+    });
+</script>
+<style>
+    .k-window {
+        width: 300px !important;
+    }
+</style>
+
+@using (Html.BeginForm("Index", "Crud", FormMethod.Post, new { id = "EmployeeDetails" }))
+{
+    <div id="EmployeeGrid" style="width: 750px;"></div>
+
+}
