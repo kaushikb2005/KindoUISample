@@ -48,7 +48,7 @@
         });
         $("#EmployeeGrid").kendoGrid({
             dataSource: dataSource,
-            editable: "popup",
+           
             groupable: true,
             filterable: true,
             sortable: true,
@@ -95,6 +95,7 @@
                 command: ["edit", { name: "destroy", text: "remove", }],
             }
             ],
+            editable: "inline",
             height: "500px",
             pageable: {
                 refresh: true,
